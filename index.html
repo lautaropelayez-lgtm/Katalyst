@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Katalyst BBQ Series — Dalstrong</title>
+<!--
+  ============================================================
+  KATALYST LP — Animated prototype (GSAP 3 + ScrollTrigger)
+  Source of truth: Figma "Landing Pages" / node 2191-1948
+  NOTE: All raster/vector assets are referenced from Figma's
+  MCP asset CDN and EXPIRE IN ~7 DAYS. Replace with Shopify
+  CDN URLs before any production/staging use.
+  Fonts: Gotham is licensed and not embedded; Montserrat is
+  loaded as the weight-matched fallback (Black→900, Bold→700,
+  Medium→500, Book→400).
+  ============================================================
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add('js');</script>
+<style>
+  :root{
+    --orange:#ff6b00;
+    --ink:#000;
+    --ink-2:#111827;
+    --gray-1:#4a4a4a;
+    --gray-2:#5f5f5f;
+    --gray-3:#949494;
+    --f: 'Gotham','Montserrat',system-ui,-apple-system,sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--f);background:#fff;color:var(--ink);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  img,video{display:block;max-width:100%}
+  a{text-decoration:none;color:inherit}
+  button{font-family:inherit;cursor:pointer;background:none;border:0}
+
+  .kicker{font-weight:700;font-size:12px;letter-spacing:2.16px;text-transform:uppercase;color:var(--orange);line-height:18px}
+  .btn-amz{display:inline-flex;align-items:center;background:var(--orange);color:#fff;font-weight:700;font-size:14px;letter-spacing:.84px;text-transform:uppercase;line-height:21px;padding:16px 30px;border-radius:6px;transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s;will-change:transform}
+  .btn-amz:hover{transform:translateY(-2px);box-shadow:0 10px 24px -8px rgba(255,107,0,.55)}
+
+  /* ============ HERO ============ */
+  .hero{position:relative;width:100vw;height:100vh;height:100svh;overflow:hidden;background:#f4f4f4}
+  .hero__media{position:absolute;inset:0;will-change:transform,opacity}
+  .hero__media video{width:100%;height:100%;object-fit:cover}
+
+  /* ============ SECTION 2 ============ */
+  .s2{background:#f4f4f4;padding:90px 0 50px;overflow:hidden}
+  .s2__inner{display:flex;justify-content:center}
+  .s2__stage{position:relative;width:1040px;height:550px;flex:none;transform-origin:top center}
+  .s2__copy{position:absolute;left:-118px;top:-27px;width:480px;height:550px;display:flex;flex-direction:column;justify-content:center}
+  .s2__logo{width:168px;height:auto;margin-bottom:20px}
+  .s2__copy .kicker{margin-bottom:0}
+  .s2__h1{font-weight:900;font-size:50px;line-height:50px;text-transform:uppercase;padding-top:12px}
+  .s2__stars{display:flex;gap:8px;align-items:center;padding-top:20px}
+  .s2__stars span{font-family:'Montserrat',sans-serif;font-size:18px;line-height:28px;letter-spacing:-.45px;color:var(--orange)}
+  .s2__p{font-weight:400;font-size:16px;line-height:24.8px;padding:16px 0 28px}
+  .s2__trust{font-weight:400;font-size:13px;line-height:19.5px;color:#040404;padding-top:25px}
+  .s2__img{position:absolute;will-change:transform,opacity}
+  .s2__img img{width:100%;height:100%;object-fit:contain;pointer-events:none}
+  .s2__img--spatula{left:430px;top:6px;width:328px;height:493px;transform:rotate(-15deg);z-index:4}
+  .s2__img--tongs{left:578px;top:-27px;width:360px;height:541px;transform:rotate(-7.59deg);z-index:1}
+  .s2__img--fork{left:789px;top:-12px;width:344px;height:516px;transform:rotate(-16.34deg);z-index:3}
+  .s2__img--knife{left:966px;top:-1px;width:325px;height:488px;transform:rotate(-21.08deg);z-index:2}
+
+  /* ============ SECTION 3 ============ */
+  .s3{background:#fff;padding:83px 0 84px;overflow:hidden}
+  .s3__head{max-width:1187px;margin:0 auto 80px;text-align:center;text-transform:uppercase;padding:0 24px}
+  .s3__head .kicker{font-family:'Montserrat',sans-serif;font-size:12.8px;letter-spacing:2.31px;line-height:19.2px;display:block;margin-bottom:13px}
+  .s3__h2{font-weight:900;font-size:40px;line-height:36.9px}
+  .s3__grid{display:flex;gap:30px;justify-content:center;flex-wrap:wrap;padding:0 24px}
+  .s3__card{width:342px;display:flex;flex-direction:column;gap:20px;align-items:center;will-change:transform,opacity}
+  .s3__imgbox{position:relative;width:250px;height:356px;overflow:hidden}
+  .s3__imgbox>img{width:100%;height:100%;object-fit:cover;pointer-events:none}
+  .s3__imgbox--spatula img{position:absolute;width:639px;height:959px;left:-290px;top:66px;transform:rotate(-15deg);max-width:none;object-fit:contain}
+  .s3__fade{position:absolute;left:6px;bottom:0;width:244px;height:81px;background:linear-gradient(to top,#fff 23.8%,rgba(255,255,255,0) 100%)}
+  .s3__info{background:#f6f6f6;border-radius:8.5px;padding:27.8px;width:100%;min-height:220px}
+  .s3__h3{font-weight:700;font-size:18px;line-height:25.6px;text-transform:uppercase}
+  .s3__info p{font-weight:400;font-size:16px;line-height:24.8px;color:var(--gray-1);padding-top:12.8px}
+
+  /* ============ SECTION 4 ============ */
+  .s4{position:relative;background:#fff;padding:64px 0;overflow:hidden}
+  .s4__bg{position:absolute;inset:0;pointer-events:none}
+  .s4__bg img{position:absolute;height:150.4%;width:84.7%;left:-19.1%;top:-12.1%;max-width:none;object-fit:cover}
+  .s4__bg::after{content:'';position:absolute;inset:0;background:linear-gradient(to left,#fff 45.2%,rgba(255,255,255,0) 68.5%)}
+  .s4__inner{position:relative;max-width:1040px;margin:0 auto;padding:0 24px}
+  .s4__copy{margin-left:auto;width:476px;max-width:100%}
+  .s4__h2{font-weight:900;font-size:40px;line-height:45px;text-transform:uppercase;padding-top:12px;width:584px;max-width:100%}
+  .s4__copy p{font-weight:400;font-size:16px;line-height:24.8px;color:var(--gray-1)}
+  .s4__copy p.pp1{padding-top:20px}
+  .s4__copy p.pp2{padding:16px 0 28px}
+
+  /* ============ SECTION 5 ============ */
+  .s5{background:#fff;padding:55px 0 90px;overflow:hidden}
+  .s5__head{max-width:1280px;margin:0 auto;padding:0 80px}
+  .s5__h2{font-weight:900;font-size:40px;line-height:44px;text-transform:uppercase;padding-top:20px}
+  .s5__sub{font-weight:400;font-size:16px;line-height:23.25px;color:var(--gray-2)}
+  .s5__track{display:flex;gap:30px;padding:45px 80px 0;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none}
+  .s5__track::-webkit-scrollbar{display:none}
+  .pcard{flex:none;width:277px;height:481px;position:relative}
+  .pcard__img{position:relative;width:277px;height:335px;background:#fff;border-radius:6px 6px 0 0;overflow:hidden;border:1px solid #f1f1f1}
+  .pcard__img img{position:absolute;max-width:none;object-fit:contain;pointer-events:none}
+  .pcard__body{background:#fff;height:110px;padding:15px 10px}
+  .pcard__top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .pcard__series{font-weight:400;font-size:12px;line-height:12.9px;color:#4a5565}
+  .chip{display:flex;align-items:center;gap:3.5px;background:#f8f8f8;border-radius:30px;height:18px;padding:0 8px;font-weight:500;font-size:10px;color:#101828}
+  .chip img{width:7px;height:7px}
+  .pcard__name{font-weight:700;font-size:14px;line-height:16.6px;color:#101828}
+  .pcard__desc{font-weight:400;font-size:12px;line-height:20.15px;color:var(--gray-3);padding-top:5px}
+  .pcard__buy{position:absolute;left:0;top:460px;width:277px;height:31px;background:#000;border-radius:5px;color:#fff;font-weight:700;font-size:12px;line-height:10.5px;display:flex;align-items:center;justify-content:center;padding-top:2px}
+  .s5__nav{max-width:1280px;margin:36px auto 0;padding:0 80px;display:flex;justify-content:flex-end;align-items:center;gap:26px}
+  .s5__progress{width:279px;height:4px}
+  .s5__arrows{display:flex;gap:8px}
+  .s5__arrow{position:relative;width:48px;height:48px}
+  .s5__arrow img.circle{width:48px;height:48px}
+  .s5__arrow img.chev{position:absolute;left:21px;top:18px;width:6px;height:12px}
+  .s5__arrow--prev{transform:rotate(180deg)}
+
+  /* ============ SECTION 7 ============ */
+  .s7{background:#111827;padding:80px 0}
+  .s7__inner{max-width:1040px;margin:0 auto;padding:0 20px}
+  .s7 .kicker{padding:8px 0}
+  .s7__h2{font-weight:900;font-size:44px;line-height:48px;text-transform:uppercase;color:#fff;padding:12px 0 24px;max-width:745px}
+  .s7__tablewrap{overflow-x:auto}
+  .cmp{width:100%;min-width:820px;background:#fff;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden;box-shadow:0 18px 40px -12px rgba(0,0,0,.07),0 2px 8px rgba(0,0,0,.05)}
+  .cmp__row{display:flex;height:64px;border-bottom:1px solid #e5e7eb}
+  .cmp__row:last-child{border-bottom:0}
+  .cmp__row--head{height:56px;background:#838e98;border-bottom:0}
+  .cmp__cell{display:flex;align-items:center;padding:0 16px;border-right:1px solid #e5e7eb;font-size:14px;line-height:20px}
+  .cmp__row--head .cmp__cell{border-right:1px solid rgba(255,255,255,.1);color:#fff;font-weight:700;font-size:12px;letter-spacing:1.2px;text-transform:uppercase}
+  .cmp__cell:nth-child(1){width:36%;font-weight:700;color:#111827}
+  .cmp__cell:nth-child(2){width:28%;font-weight:400;color:#2e3442}
+  .cmp__cell:nth-child(3){width:36%;font-weight:700;color:#111827;background:#fff7f2;border-left:3px solid var(--orange);border-right:0}
+  .cmp__row--head .cmp__cell:nth-child(3){background:transparent;border-left:0}
+
+  /* ============ SECTION 8 ============ */
+  .s8{background:#838e98;height:166px;position:relative;overflow:hidden}
+  .s8__pill{position:absolute;left:50%;top:31px;transform:translateX(-50%);border:1px solid #d1d6de;border-radius:60px;padding:0 18px;height:32px;display:flex;align-items:center;color:#d1d6de;font-weight:500;font-size:14px;text-transform:uppercase;white-space:nowrap}
+  .s8__logos{position:absolute;left:50%;top:100px;transform:translateX(-50%);display:flex;gap:77px;align-items:center;width:max-content}
+  .s8__logos img{height:28px;width:auto}
+
+  /* ============ SECTION 9 ============ */
+  .s9{background:#fff;padding:64px 0}
+  .s9__inner{max-width:1040px;margin:0 auto;padding:0 24px}
+  .s9__h2{font-weight:900;font-size:40px;line-height:32.4px;text-transform:uppercase;padding:12px 0 32px}
+  .faq{border-bottom:1px solid #dedede;padding:16px 0 17px;display:flex;justify-content:space-between;align-items:center}
+  .faq:last-child{border-bottom:0}
+  .faq__q{font-weight:700;font-size:15px;letter-spacing:.3px;line-height:22.5px;text-transform:uppercase}
+  .faq__plus{font-family:'Montserrat',sans-serif;font-weight:700;font-size:20px;line-height:20px;color:var(--orange)}
+
+  /* ============ SECTION 10 ============ */
+  .s10{background:#000;padding:80px 24px;display:flex;flex-direction:column;align-items:center;text-align:center}
+  .s10__h2{font-weight:900;font-size:36px;line-height:38.9px;text-transform:uppercase;color:#fff;padding-bottom:16px}
+  .s10__p{font-weight:400;font-size:16px;line-height:24.8px;color:#c9c9c9;max-width:520px;padding-bottom:32px}
+  .s10 .btn-amz{font-family:'Montserrat',sans-serif;font-weight:800;font-size:15px;letter-spacing:.9px;line-height:22.5px}
+  .s10__nl{margin-top:48px;border-top:1px solid rgba(255,255,255,.15);padding-top:33px;width:100%;max-width:1000px;display:flex;flex-direction:column;align-items:center}
+  .s10__nl-p{font-weight:400;font-size:14px;line-height:21.7px;color:#c9c9c9;max-width:440px;padding-bottom:16px}
+  .s10__form{display:flex;gap:12px;width:100%;max-width:420px}
+  .s10__form input{flex:1;min-width:0;height:53px;border:0;border-radius:4px;padding:12px 16px;font-family:var(--f);font-size:14px;color:#333}
+  .s10__form input::placeholder{color:var(--gray-3)}
+  .s10__ghost{border:2px solid #fff;border-radius:6px;color:#fff;font-weight:700;font-size:14px;letter-spacing:.84px;text-transform:uppercase;padding:16px 28px;line-height:21px;transition:background .25s,color .25s}
+  .s10__ghost:hover{background:#fff;color:#000}
+  .s10__legal{font-weight:400;font-size:11px;line-height:16.5px;color:var(--gray-3);padding-top:12px}
+
+  /* Initial hidden states — only when JS is on AND motion is allowed (no FOUC, no content loss) */
+  @media (prefers-reduced-motion: no-preference){
+    .js .s2__img,.js .s3__card{opacity:0}
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:1240px){
+    .s2__copy{left:0}
+  }
+  @media (max-width:1024px){
+    .s2__inner{flex-direction:column;align-items:center;gap:0}
+    .s2__stage{height:auto}
+    .s2__copy{position:static;width:min(560px,100%);height:auto;padding:0 24px 24px}
+    .s2__h1{font-size:clamp(34px,6vw,50px);line-height:1.05}
+    .s2__cluster{position:relative;width:1040px;height:560px;transform-origin:top left}
+    .s3__h2{font-size:clamp(28px,5vw,40px);line-height:1.1}
+    .s4__copy{width:100%}
+    .s4__h2{font-size:clamp(30px,5.5vw,40px)}
+    .s4__bg img{width:140%;left:-40%}
+    .s5__head,.s5__nav{padding:0 24px}
+    .s5__track{padding:45px 24px 0}
+    .s7__h2{font-size:clamp(30px,6vw,44px);line-height:1.15}
+    .s9__h2{font-size:clamp(26px,5.5vw,40px);line-height:1.1}
+    .s8__logos{gap:44px}
+  }
+  @media (max-width:640px){
+    .s2__stars span:last-child{font-size:15px}
+    .s10__form{flex-direction:column}
+    .s10__h2{font-size:clamp(26px,7.5vw,36px)}
+    .s5__progress{display:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ SECTION 1 · HERO ============ -->
+<section class="hero" id="hero">
+  <div class="hero__media">
+    <video src="hero.mp4" autoplay muted loop playsinline preload="auto" aria-label="Katalyst BBQ series hero video"></video>
+  </div>
+</section>
+
+<!-- ============ SECTION 2 · IMAGE CASCADE ============ -->
+<section class="s2" id="s2">
+  <div class="s2__inner">
+    <div class="s2__stage">
+      <div class="s2__copy">
+        <img class="s2__logo" src="https://www.figma.com/api/mcp/asset/3b5b5a4f-c72d-46f8-9b62-c8c0304ccb5c" alt="Dalstrong">
+        <p class="kicker">THE KATALYST BBQ SERIES · AVAILABLE ON AMAZON</p>
+        <h1 class="s2__h1">The grip that doesn't quit when the gloves go on</h1>
+        <div class="s2__stars"><span>★★★★★</span></div>
+        <p class="s2__p">304 stainless heads. Matte titanium coating that wipes clean after the messiest brisket day. And a soft-touch rubberized grip that holds — gloved, barehanded, or sauced. Ships fast with Prime.</p>
+        <div><a class="btn-amz" href="#">SEE IT ON AMAZON →</a></div>
+        <p class="s2__trust">✓ Prime shipping · ✓ Amazon's return policy · ✓ Dalstrong lifetime warranty</p>
+      </div>
+      <div class="s2__cluster">
+        <div class="s2__img s2__img--spatula"><img src="https://www.figma.com/api/mcp/asset/1a8d6a18-2f49-4e94-aa29-9cfc187a2c1f" alt="Katalyst grill spatula"></div>
+        <div class="s2__img s2__img--tongs"><img src="https://www.figma.com/api/mcp/asset/72f3318a-7bf7-4f31-9a58-c382983dbb29" alt="Katalyst locking tongs"></div>
+        <div class="s2__img s2__img--fork"><img src="https://www.figma.com/api/mcp/asset/5c3eca97-d2f2-4905-ab8d-ea8751bf5624" alt="Katalyst carving fork"></div>
+        <div class="s2__img s2__img--knife"><img src="https://www.figma.com/api/mcp/asset/c5bee041-fa28-4a47-834f-94ee8a98cd07" alt="Katalyst carving knife"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 3 · CARD CASCADE ============ -->
+<section class="s3" id="s3">
+  <div class="s3__head">
+    <span class="kicker">WHY COOKS ARE SWITCHING</span>
+    <h2 class="s3__h2">Built for the cook who shows up in any weather</h2>
+  </div>
+  <div class="s3__grid">
+    <article class="s3__card">
+      <div class="s3__imgbox s3__imgbox--spatula">
+        <img src="https://www.figma.com/api/mcp/asset/1a8d6a18-2f49-4e94-aa29-9cfc187a2c1f" alt="Rubberized grip detail">
+        <div class="s3__fade"></div>
+      </div>
+      <div class="s3__info">
+        <h3 class="s3__h3">Insane grip</h3>
+        <p>Soft-touch TPR rubberized handles hold firm with heavy gloves on, bare hands, or marinade running down your wrist. This is the difference-maker.</p>
+      </div>
+    </article>
+    <article class="s3__card">
+      <div class="s3__imgbox">
+        <img src="https://www.figma.com/api/mcp/asset/2a35641d-20c9-4457-9eab-ef26b7d49200" alt="Oil and splash resistant finish">
+        <div class="s3__fade"></div>
+      </div>
+      <div class="s3__info">
+        <h3 class="s3__h3">Oil &amp; splash resistant</h3>
+        <p>304 stainless + matte titanium coating shrugs off rust, grease, and sauce stains. Wipes clean in one swipe.</p>
+      </div>
+    </article>
+    <article class="s3__card">
+      <div class="s3__imgbox">
+        <img src="https://www.figma.com/api/mcp/asset/6132b1c5-3c57-4eaf-99e7-7137804459aa" alt="All-weather build">
+        <div class="s3__fade"></div>
+      </div>
+      <div class="s3__info">
+        <h3 class="s3__h3">All-weather build</h3>
+        <p>Cold smoke sessions, rainy brisket days, windy cookouts. 17"+ handles keep your hands clear of the fire.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ============ SECTION 4 (static, as designed) ============ -->
+<section class="s4">
+  <div class="s4__bg"><img src="https://www.figma.com/api/mcp/asset/25852635-12d2-4b69-a7e6-c808333c14a8" alt=""></div>
+  <div class="s4__inner">
+    <div class="s4__copy">
+      <p class="kicker">SEE THE DIFFERENCE</p>
+      <h2 class="s4__h2">Most premium sets solved for steel. Nobody solved for grip.</h2>
+      <p class="pp1">Slick plastic and bare-metal handles fail exactly when it matters: gloved up over live fire, or halfway through a flip with sauce on your hands. Katalyst's rubberized grip grabs back — every cook, every condition.</p>
+      <p class="pp2">Plus locking tongs that actually stay locked: a sliding plate that stores flat and opens with one thumb. No spring fatigue, no jammed pull-pins.</p>
+      <div><a class="btn-amz" href="#">CHECK PRICE ON AMAZON →</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 5 (static, as designed) ============ -->
+<section class="s5">
+  <div class="s5__head">
+    <p class="kicker" style="font-family:'Montserrat',sans-serif">PICK YOUR SETUP</p>
+    <h2 class="s5__h2">One tool or the whole pit — all on Amazon</h2>
+    <p class="s5__sub">Every Katalyst tool ships Prime and carries the Dalstrong lifetime warranty.</p>
+  </div>
+  <div class="s5__track" id="s5track">
+    <article class="pcard">
+      <div class="pcard__img">
+        <img src="https://www.figma.com/api/mcp/asset/1a8d6a18-2f49-4e94-aa29-9cfc187a2c1f" alt="Katalyst spatula" style="width:224px;height:336px;left:26px;top:4px;transform:rotate(6.05deg)">
+      </div>
+      <div class="pcard__body">
+        <div class="pcard__top">
+          <span class="pcard__series">Katalyst Series</span>
+          <span class="chip"><img src="https://www.figma.com/api/mcp/asset/faae8bb6-f73f-4579-b618-2682f099fb77" alt="">4.9</span>
+        </div>
+        <p class="pcard__name">Spatula</p>
+        <p class="pcard__desc">17.9" long handle, 2.0 mm 304 stainless head — flips brisket points without folding.</p>
+      </div>
+      <a class="pcard__buy" href="#">BUY ON AMAZON</a>
+    </article>
+    <article class="pcard">
+      <div class="pcard__img">
+        <img src="https://www.figma.com/api/mcp/asset/72f3318a-7bf7-4f31-9a58-c382983dbb29" alt="Katalyst locking tongs" style="width:237px;height:355px;left:23px;top:-10px;transform:rotate(7.35deg)">
+      </div>
+      <div class="pcard__body">
+        <div class="pcard__top">
+          <span class="pcard__series">Katalyst Series</span>
+          <span class="chip"><img src="https://www.figma.com/api/mcp/asset/faae8bb6-f73f-4579-b618-2682f099fb77" alt="">4.9</span>
+        </div>
+        <p class="pcard__name">Locking Tongs</p>
+        <p class="pcard__desc">17.5" scalloped jaws with a sliding lock plate that actually stays locked.</p>
+      </div>
+      <a class="pcard__buy" href="#">BUY ON AMAZON</a>
+    </article>
+    <article class="pcard">
+      <div class="pcard__img">
+        <img src="https://www.figma.com/api/mcp/asset/1a8d6a18-2f49-4e94-aa29-9cfc187a2c1f" alt="Katalyst spatula" style="width:192px;height:287px;left:13px;top:9px;transform:rotate(6.05deg)">
+        <img src="https://www.figma.com/api/mcp/asset/72f3318a-7bf7-4f31-9a58-c382983dbb29" alt="Katalyst tongs" style="width:203px;height:304px;left:60px;top:21px;transform:rotate(0.95deg)">
+      </div>
+      <div class="pcard__body">
+        <div class="pcard__top">
+          <span class="pcard__series">Katalyst Series</span>
+          <span class="chip"><img src="https://www.figma.com/api/mcp/asset/faae8bb6-f73f-4579-b618-2682f099fb77" alt="">4.9</span>
+        </div>
+        <p class="pcard__name">Spatula + Tongs</p>
+        <p class="pcard__desc">The flip-and-grab combo in a windowed, gift-ready box.</p>
+      </div>
+      <a class="pcard__buy" href="#">BUY ON AMAZON</a>
+    </article>
+    <article class="pcard">
+      <div class="pcard__img">
+        <img src="https://www.figma.com/api/mcp/asset/c5bee041-fa28-4a47-834f-94ee8a98cd07" alt="Katalyst carving knife" style="width:196px;height:293px;left:19px;top:18px;transform:rotate(-1.92deg)">
+        <img src="https://www.figma.com/api/mcp/asset/5c3eca97-d2f2-4905-ab8d-ea8751bf5624" alt="Katalyst carving fork" style="width:204px;height:306px;left:61px;top:22px;transform:rotate(2.44deg)">
+      </div>
+      <div class="pcard__body">
+        <div class="pcard__top">
+          <span class="pcard__series">Katalyst Series</span>
+          <span class="chip"><img src="https://www.figma.com/api/mcp/asset/faae8bb6-f73f-4579-b618-2682f099fb77" alt="">4.9</span>
+        </div>
+        <p class="pcard__name">Carving Knife + Fork set</p>
+        <p class="pcard__desc">11" carving blade + meat fork — for the tableside carve, holiday roast, brisket off the smoker.</p>
+      </div>
+      <a class="pcard__buy" href="#">BUY ON AMAZON</a>
+    </article>
+    <article class="pcard">
+      <div class="pcard__img">
+        <img src="https://www.figma.com/api/mcp/asset/c5bee041-fa28-4a47-834f-94ee8a98cd07" alt="Katalyst carving knife" style="width:196px;height:293px;left:19px;top:18px;transform:rotate(-1.92deg)">
+        <img src="https://www.figma.com/api/mcp/asset/5c3eca97-d2f2-4905-ab8d-ea8751bf5624" alt="Katalyst carving fork" style="width:204px;height:306px;left:61px;top:22px;transform:rotate(2.44deg)">
+      </div>
+      <div class="pcard__body">
+        <div class="pcard__top">
+          <span class="pcard__series">Katalyst Series</span>
+          <span class="chip"><img src="https://www.figma.com/api/mcp/asset/faae8bb6-f73f-4579-b618-2682f099fb77" alt="">4.9</span>
+        </div>
+        <p class="pcard__name">Complete 4-Pc Grilling Set</p>
+        <p class="pcard__desc">Spatula, locking tongs, carving knife, and fork. Grill it, carve it, serve it — one kit.</p>
+      </div>
+      <a class="pcard__buy" href="#">BUY ON AMAZON</a>
+    </article>
+  </div>
+  <div class="s5__nav">
+    <img class="s5__progress" src="https://www.figma.com/api/mcp/asset/abd1ba6a-7029-49a1-9489-ec2b4373290b" alt="">
+    <div class="s5__arrows">
+      <button class="s5__arrow s5__arrow--prev" id="s5prev" aria-label="Previous products">
+        <img class="circle" src="https://www.figma.com/api/mcp/asset/319fd9c3-461d-45cb-a7a9-92b0277b6b53" alt="">
+        <img class="chev" src="https://www.figma.com/api/mcp/asset/58108eed-5aeb-47a0-b8f1-d7b74d758c68" alt="">
+      </button>
+      <button class="s5__arrow" id="s5next" aria-label="Next products">
+        <img class="circle" src="https://www.figma.com/api/mcp/asset/be5f92de-f36b-40e0-81be-3bc4b46a0801" alt="">
+        <img class="chev" src="https://www.figma.com/api/mcp/asset/48a1b052-554e-4dcb-9859-5f4d1572267c" alt="">
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 7 (static, as designed) ============ -->
+<section class="s7">
+  <div class="s7__inner">
+    <p class="kicker">THE 10-SECOND SPEC CHECK</p>
+    <h2 class="s7__h2">Most BBQ tools vs. Katalyst</h2>
+    <div class="s7__tablewrap">
+      <div class="cmp">
+        <div class="cmp__row cmp__row--head">
+          <div class="cmp__cell">Feature</div>
+          <div class="cmp__cell">Most BBQ Tools</div>
+          <div class="cmp__cell">Katalyst BBQ</div>
+        </div>
+        <div class="cmp__row">
+          <div class="cmp__cell">Grip when wet, oily, or gloved</div>
+          <div class="cmp__cell">Slips when it matters</div>
+          <div class="cmp__cell">Rubberized TPR - locked in</div>
+        </div>
+        <div class="cmp__row">
+          <div class="cmp__cell">Head material</div>
+          <div class="cmp__cell">Thin mystery stainless</div>
+          <div class="cmp__cell">304 stainless steel</div>
+        </div>
+        <div class="cmp__row">
+          <div class="cmp__cell">Finish</div>
+          <div class="cmp__cell">Stains, spots, rusts</div>
+          <div class="cmp__cell">Matte titanium - wipes clean</div>
+        </div>
+        <div class="cmp__row">
+          <div class="cmp__cell">Length</div>
+          <div class="cmp__cell">Knuckle-scorching short</div>
+          <div class="cmp__cell">17"+ - hands clear of fire</div>
+        </div>
+        <div class="cmp__row">
+          <div class="cmp__cell">Warranty</div>
+          <div class="cmp__cell">One season, maybe</div>
+          <div class="cmp__cell">Dalstrong lifetime warranty</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 8 (static, as designed) ============ -->
+<section class="s8">
+  <div class="s8__pill">As Seen On</div>
+  <div class="s8__logos">
+    <img src="https://www.figma.com/api/mcp/asset/fd54da0c-e336-4607-bc80-1ca8d2c51956" alt="Men's Health">
+    <img src="https://www.figma.com/api/mcp/asset/ac6657d2-6a07-4d04-8ddf-b6d49123ec15" alt="">
+    <img src="https://www.figma.com/api/mcp/asset/610b5b3a-05cb-4eea-aff3-5731cbf28311" alt="Activision">
+    <img src="https://www.figma.com/api/mcp/asset/2c4bb322-1c46-42c8-bd7e-aca8ddd3f4b6" alt="Yahoo!">
+    <img src="https://www.figma.com/api/mcp/asset/ed735569-05b3-4eb4-a625-92566abe3fed" alt="Netflix">
+    <img src="https://www.figma.com/api/mcp/asset/54d7400e-68b8-4f3d-aa7a-c44aabc58bf2" alt="CNN Underscored">
+    <img src="https://www.figma.com/api/mcp/asset/fd54da0c-e336-4607-bc80-1ca8d2c51956" alt="">
+    <img src="https://www.figma.com/api/mcp/asset/e5bfb6f4-b06b-4cd3-9977-224cf6ba70fb" alt="">
+  </div>
+</section>
+
+<!-- ============ SECTION 9 (static, as designed) ============ -->
+<section class="s9">
+  <div class="s9__inner">
+    <p class="kicker">QUICK ANSWERS</p>
+    <h2 class="s9__h2">Before you head to Amazon</h2>
+    <div>
+      <div class="faq"><span class="faq__q">Is shipping really Prime?</span><span class="faq__plus">+</span></div>
+      <div class="faq"><span class="faq__q">What makes the grip different?</span><span class="faq__plus">+</span></div>
+      <div class="faq"><span class="faq__q">Which set should I get?</span><span class="faq__plus">+</span></div>
+      <div class="faq"><span class="faq__q">What does the lifetime warranty cover?</span><span class="faq__plus">+</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 10 (static, as designed) ============ -->
+<section class="s10">
+  <h2 class="s10__h2">Fire's not going to tend itself</h2>
+  <p class="s10__p">Join the cooks who stopped fighting their tools. Prime shipping, lifetime warranty, insane grip.</p>
+  <a class="btn-amz" href="#">GET KATALYST ON AMAZON →</a>
+  <div class="s10__nl">
+    <p class="s10__nl-p">Not ready today? Get the pit notes — recipes, techniques, and first word on Katalyst restocks.</p>
+    <div class="s10__form">
+      <input type="email" placeholder="your@email.com" aria-label="Email address">
+      <button class="s10__ghost" type="button">SEND THEM</button>
+    </div>
+    <p class="s10__legal">By signing up you agree to receive Dalstrong marketing emails. Unsubscribe anytime.</p>
+  </div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+  'use strict';
+
+  /* ---------- Responsive fit for the Section 2 desktop composition ---------- */
+  /* The rotated product cluster is a fixed 1040px stage; below 1100px we scale
+     it proportionally instead of reflowing, so nothing shifts or clips oddly. */
+  var stage = document.querySelector('.s2__stage');
+  var cluster = document.querySelector('.s2__cluster');
+  function fitStage(){
+    var vw = document.documentElement.clientWidth;
+    if (vw <= 1024){
+      var s = Math.min(1, (vw - 24) / 1040);
+      cluster.style.transform = 'scale(' + s + ')';
+      cluster.style.height = (560) + 'px';
+      cluster.style.marginBottom = ((560 * s) - 560) + 'px';
+      stage.style.width = '100%';
+    } else {
+      cluster.style.transform = '';
+      cluster.style.marginBottom = '';
+      stage.style.width = '1040px';
+      var off = Math.max(0, (1240 - vw) / 2);
+      /* keep the left copy from bleeding off-canvas on mid widths */
+      document.querySelector('.s2__copy').style.left = (vw < 1360 ? Math.max(-118 + off, -118) : -118) + 'px';
+    }
+  }
+  fitStage();
+  window.addEventListener('resize', fitStage);
+
+  /* ---------- Section 5 carousel arrows (functional, no visual change) ---------- */
+  var track = document.getElementById('s5track');
+  document.getElementById('s5next').addEventListener('click', function(){ track.scrollBy({left: 307, behavior:'smooth'}); });
+  document.getElementById('s5prev').addEventListener('click', function(){ track.scrollBy({left: -307, behavior:'smooth'}); });
+
+  /* ---------- GSAP scroll animations ---------- */
+  if (!window.gsap || !window.ScrollTrigger){
+    /* CDN failed: make sure nothing stays hidden */
+    document.documentElement.classList.remove('js');
+    return;
+  }
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.config({ force3D: true });
+
+  var mm = gsap.matchMedia();
+
+  mm.add('(prefers-reduced-motion: no-preference)', function(){
+
+    /* ===== SECTION 1 · HERO — scroll-driven video (pinned + scrubbed) =====
+       The video does NOT autoplay: playback is mapped 1:1 to scroll progress.
+       The hero pins for 250% of viewport height; scrolling scrubs through the
+       full clip, and the last ~18% of the timeline runs the cinematic exit
+       (translate up + fade) into Section 2. */
+    var video = document.querySelector('.hero__media video');
+    video.removeAttribute('autoplay');
+    video.removeAttribute('loop');
+    video.pause();
+    try { video.currentTime = 0; } catch(e){}
+
+    var proxy = { p: 0 };
+    var heroTl = gsap.timeline({
+      defaults: { ease: 'none' },
+      scrollTrigger: {
+        trigger: '.hero',
+        start: 'top top',
+        end: '+=250%',
+        pin: true,
+        anticipatePin: 1,
+        scrub: 0.8            /* ~1s smoothing = premium settle, no abrupt jumps */
+      }
+    });
+    heroTl
+      .to(proxy, {
+        p: 1,
+        duration: 1,
+        onUpdate: function(){
+          if (video.duration) {
+            video.currentTime = proxy.p * Math.max(0, video.duration - 0.05);
+          }
+        }
+      }, 0)
+      /* exit during the final stretch of the pin: upward drift only (no fade) */
+      .to('.hero__media', { yPercent: -12, scale: 1.04, duration: 0.18 }, 0.82);
+
+    /* trigger positions depend on video metadata being ready */
+    video.addEventListener('loadedmetadata', function(){ ScrollTrigger.refresh(); }, { once: true });
+
+    /* ===== SECTION 2 · IMAGE CASCADE — triggers once at ~25% in view ===== */
+    gsap.set('.s2__img', { opacity: 0, y: 52, scale: 0.975 });
+    gsap.to('.s2__img', {
+      opacity: 1, y: 0, scale: 1,
+      duration: 1.1,
+      ease: 'power3.out',
+      stagger: 0.18,          /* left → right (DOM order matches layout order) */
+      scrollTrigger: {
+        trigger: '.s2',
+        start: 'top 75%',     /* ≈ 25% of the section inside the viewport */
+        once: true
+      }
+    });
+
+    /* ===== SECTION 3 · CARD CASCADE — triggers once on section entry ===== */
+    gsap.set('.s3__card', { opacity: 0, y: 50, scale: 0.95 });
+    gsap.to('.s3__card', {
+      opacity: 1, y: 0, scale: 1,
+      duration: 0.8,
+      ease: 'power3.out',
+      stagger: 0.18,
+      scrollTrigger: {
+        trigger: '.s3__grid',
+        start: 'top 88%',     /* as the user begins scrolling into the section */
+        once: true
+      }
+    });
+
+    return function(){ /* matchMedia cleanup */ };
+  });
+
+  mm.add('(prefers-reduced-motion: reduce)', function(){
+    /* No motion: no pin, no scrub. The video keeps its native autoplay/loop
+       (media playback, not animation) and everything is fully visible. */
+    gsap.set('.s2__img, .s3__card, .hero__media', { clearProps: 'all', opacity: 1 });
+  });
+
+  /* Recalculate trigger positions after images/video finish loading */
+  window.addEventListener('load', function(){ ScrollTrigger.refresh(); });
+})();
+</script>
+</body>
+</html>
